@@ -11,51 +11,51 @@ int main()
     int n,inp1,inp2;
     char command;
     cin >> n;
-    map<int,vector<int> > station;
+    map<int,cargo* > station;
     bool in_use[100000];
     for(int i=0;i<100000;i++)
+    {
+        station.insert(pair<int,cargo* > (inp2, NULL));
         in_use[i] = 0;
+    }
     for(int e=0;e<n;e++)
     {
         cin >> command >> inp1 >> inp2;
+        if(in_use[inp2]==0)
+        {
+            cargo* head = new cargo;
+            head->num = -1;
+            head->next = NULL;
+            in_use[inp2] = 1;
+            station.insert(pair<int,cargo* > (inp2, head));
+        }
         if(command=='N')
         {
-            if(in_use[inp2]==0)
-            {
-                in_use[inp2] = 1;
-                vector<int> tmpv;
-                tmpv.push_back(inp1);
-                //station[inp2].push_back(inp1);
-                station.insert(pair<int,vector<int> > (inp2, tmpv));
-            }
-            else
-                station[inp2].push_back(inp1);
+            cargo* newOne = new cargo;
+            newOne->num = inp1;
+            newOne->next = NULL;
+            cargo* cur = station[inp2]; 
+            while(cur->next!=NULL)
+                cur = cur->next;
+            cur->next = newOne;
         }
         else
         {
-            if(in_use[inp2]==0 && station[inp1].size()!=0)
-            {
-                in_use[inp2] = 1;
-                vector<int> tmpv;
-                tmpv.push_back(station[inp1][0]);
-                station[inp1].erase(station[inp1].begin());
-                station.insert(pair<int,vector<int> > (inp2, tmpv));
-            }
-            //in_use[inp1] = 0;
-            int tmp = station[inp1].size();
-            for(int i=0;i<tmp;i++)
-            {
-                station[inp2].push_back(station[inp1][0]);
-                station[inp1].erase(station[inp1].begin());
-            }
-            /*for(int i=0;i<station[inp1].size();i++)
-                station[inp2].push_back(station[inp1][i]);
-            station[inp1].clear();*/
+            if(in_use[inp1]==0)
+                continue;
+            cargo* cur = station[inp2];
+            while(cur->next!=NULL)
+                cur = cur->next;
+            cur->next = station[inp1]->next;
+            station[inp1]->next = NULL;
         }
     }
     for(int i=0;i<100000;i++)
         if(in_use[i])
-            for(int j=0;j<station[i].size();j++)
-                cout << station[i][j] << endl;
+            while(station[i]->next!=NULL)
+            {
+                cout << station[i]->next->num << endl;
+                station[i]->next = station[i]->next->next;
+            }
     return 0;
 }
