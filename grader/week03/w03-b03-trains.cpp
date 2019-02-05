@@ -22,9 +22,15 @@ int main()
         {
             in_use[inp1] = 0;
             in_use[inp2] = 1;
-            for(int i=0;i<station[inp1].size();i++)
+            int tmp = station[inp1].size();
+            for(int i=0;i<tmp;i++)
+            {
+                station[inp2].push_back(station[inp1][0]);
+                station[inp1].erase(station[inp1].begin());
+            }
+            /*for(int i=0;i<station[inp1].size();i++)
                 station[inp2].push_back(station[inp1][i]);
-            station[inp1].clear();
+            station[inp1].clear();*/
         }
     }
     for(int i=0;i<100000;i++)
