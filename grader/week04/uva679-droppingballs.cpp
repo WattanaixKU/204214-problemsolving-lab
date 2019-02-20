@@ -4,12 +4,16 @@ using namespace std;
 bool tree[1048576];
 int drop(int d,int pos)
 {
+    for(int i=0;i<d;i++)
+    {
+        tree[pos] = !tree[pos];
+        if(tree[pos*2+1] == tree[pos*2+2])
+            pos = pos*2+1;
+        else
+            pos = pos*2+2;
+    }
     tree[pos] = !tree[pos];
-    if(d==0)
-        return pos;
-    if(tree[pos*2+1] == tree[pos*2+2])
-        return drop(d-1,pos*2+1);
-    return drop(d-1,pos*2+2);
+    return pos;
 }
 int main()
 {
