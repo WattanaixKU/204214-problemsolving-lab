@@ -1,9 +1,9 @@
 #include <iostream>
 #include <stack>
 using namespace std;
-stack<pair<int,bool> > s;
 int main()
 {
+    stack<pair<int,bool> > s;
     int n,m,start,d,count = 0;
     pair<int,bool> c;
     cin >> n >> m;

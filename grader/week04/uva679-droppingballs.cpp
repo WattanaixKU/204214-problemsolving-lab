@@ -22,11 +22,13 @@ int main()
     for(int r=0;r<t;r++)
     {
         cin >> d >> b;
+        b = b % (int)pow(2,d-1);
         for(int i=0;i<pow(2,d);i++)
             tree[i] = 0;
             //cout << i << endl;
         for(int i=0;i<b-1;i++)
-            drop(d-1,0);
+            cout << drop(d-1,0)+1 << endl;
+            //drop(d-1,0);
         cout << drop(d-1,0)+1 << endl;
     }
     cin >> t;
