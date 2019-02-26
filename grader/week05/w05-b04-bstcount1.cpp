@@ -3,12 +3,14 @@ using namespace std;
 struct node
 {
     int value;
+    int child;
     node* l;
     node* r;
-    node(int v, node* l = 0, node* r = 0) : value(v), l(l), r(r){}
+    node(int v, int child = 0, node* l = 0, node* r = 0) : value(v),child(child) , l(l), r(r){}
 };
 void BSTinsert(node*root, int x)
 {
+    root->child++;
     if(x <= root->value)
         if(root->l == 0)
             root->l = new node(x);
@@ -24,7 +26,7 @@ int BSTcountall(node* croot)
 {
     if(croot == 0)
         return 0;
-    return 1+BSTcountall(croot->l)+BSTcountall(croot->r);
+    return croot->child+1;
 }
 int BSTcount(node* root, int x)
 {
@@ -40,6 +42,7 @@ int BSTcount(node* root, int x)
 }
 int main()
 {
+    ios::sync_with_stdio(false);
     node* root = 0;
     int m,k,x;
     cin >> m;
