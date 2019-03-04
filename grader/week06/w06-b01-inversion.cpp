@@ -57,9 +57,9 @@ int main()
 {
     ios::sync_with_stdio(false);
     node* root = 0;
-    int m,x,count = 0;
-    //cin >> m;
-    scanf("%d ",&m);
+    int m,x;
+    long long count = 0;
+    scanf("%d",&m);
     for(int i=0;i<m;i++)
     {
         scanf("%d", &x);
