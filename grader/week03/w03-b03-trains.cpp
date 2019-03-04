@@ -1,4 +1,5 @@
 #include <iostream>
+//#include <cstdio>
 using namespace std;
 struct cargo{
     int num;
@@ -8,7 +9,8 @@ int main()
 {
     int n,inp1,inp2;
     char command;
-    cin >> n;
+    scanf("%d ",&n);
+    //cin >> n;
     cargo* station[100000];
     cargo* tail[100000];
     for(int i=0;i<100000;i++)
@@ -18,7 +20,8 @@ int main()
     }
     for(int e=0;e<n;e++)
     {
-        cin >> command >> inp1 >> inp2;
+        //cin >> command >> inp1 >> inp2;
+        scanf("%c %d %d ", &command, &inp1, &inp2);
         inp2--;
         if(command=='N')
         {
