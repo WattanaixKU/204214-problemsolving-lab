@@ -14,10 +14,13 @@ void move_l()
 
 void move_r()
 {
-    p++;
-    while(ans[p]!=' ' and ans[p]!='\0')
+    if(ans[p]!='\0')
+    {
         p++;
-    p++;
+        while(ans[p]!=' ')
+            p++;
+        p++;
+    }
 }
 
 void store_s()
@@ -82,20 +85,16 @@ int main()
                 load_s();
                 break;
             case 'd':
-                move_r();
-                j = 0;
-                store_s();
-                move_l();
-                j = 0;
-                load_s();
+                if(ans[p]!='\0')
+                {
+                    move_r();
+                    j = 0;
+                    store_s();
+                    move_l();
+                    j = 0;
+                    load_s();
+                }
         }
-        for(int i=1;ans[i]!='\0';i++)
-            if(i==p)
-                cout << '|' << ans[i];
-            else
-                cout << ans[i];
-        cout << endl;
-
     }
     for(int i=1;ans[i]!='\0';i++)
         cout << ans[i];
