@@ -1,7 +1,7 @@
 #include <iostream>
 using namespace std;
 int p = 0,j;
-string ans,s;
+char ans[2000000],s[2000000];
 void move_l()
 {
     if(p!=1)
@@ -95,6 +95,7 @@ int main()
                     load_s();
                 }
         }
+       
     }
     for(int i=1;ans[i]!='\0';i++)
         cout << ans[i];
