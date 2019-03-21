@@ -1,62 +1,38 @@
 #include <iostream>
-#include <stack>
 #include <vector>
 using namespace std;
 int main()
 {
-    stack<pair<int,bool> > s;
+    vector<pair<int,bool> > s;
     int n,m,start,d,count = 0;
     pair<int,bool> c;
     cin >> n >> m;
-    //bool tbl[n][n];
-    vector<vector<int> > tbl;
-    //cout << "pass1" << endl;
-    bool visited[n];
+    vector<bool> visited(n,0);
     vector<int> tv;
-    for(int i=0;i<n;i++)
-    {
-        tbl.push_back(tv);
-    }
+    vector<vector<int> > tbl(n,tv);
     for(int i=0;i<m;i++)
     {
         cin >> start >> d;
-        //cout << start << d << endl;
         start--;
         d--;
-        //tbl[start][d] = true;
-        //tbl[d][start] = true;
         tbl[start].push_back(d);
         tbl[d].push_back(start);
     }
-    /*
     for(int i=0;i<n;i++)
+        s.push_back(make_pair(i,1));
+    while(s.size())
     {
-        for(int j=0;j<n;j++)
-            cout << tbl[i][j];
-        cout << endl;
-    }*/
-
-    for(int i=0;i<n;i++)
-    {
-        visited[i] = false;
-        s.push(make_pair(i,true));
-    }
-    while(!s.empty())
-    {
-        //cout << "size of stack" << s.size() << endl;
-        c = s.top();
-        //cout << "\nstart " << c.first << " " << c.second;
-        s.pop();
+        c = s[s.size()-1];
+        s.pop_back();
         if(visited[c.first])
             continue;
-        //cout << "go on";
-        visited[c.first] = true;
+        visited[c.first] = 1;
         if(c.second)
             count++;
         for(int i=0;i<tbl[c.first].size();i++)
         {
             if(!visited[tbl[c.first][i]])
-                s.push(make_pair(tbl[c.first][i],false));
+                s.push_back(make_pair(tbl[c.first][i],0));
         }
     }
     cout << count << endl;
