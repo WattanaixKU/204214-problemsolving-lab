@@ -1,84 +1,41 @@
 #include <iostream>
+#include <vector>
 using namespace std;
-struct node{
-    int data;
-    node* next;
-    node* prev;
-};
 int main()
 {
-    int n,inp;
-    bool started = false;
-    string command;
+    int n,t;
+    char cmd[3];
     cin >> n;
-    node* left,*right = NULL;
-    for(int e=0;e<n;e++)
+    vector<int> v;
+    for(int i=0;i<n;i++)
     {
-        cin >> command;
-        if(command[1] == 'i')
+        cin >> cmd;
+        if(cmd[1] == 'i')
         {
-            cin >> inp;
-            node* newnode = new node;
-            newnode->data = inp;
-            newnode->prev = NULL;
-            if(command[0] == 'l')
-            {
-                if(!started)
-                {
-                    newnode->next = NULL;
-                    right = newnode;
-                    started = true;
-                }
-                else
-                {
-                    newnode->next = left; 
-                    left->prev = newnode;
-                }
-                left = newnode;
-            }
-            else 
-            {
-                if(!started)
-                {
-                    newnode->prev = NULL;
-                    left = newnode;
-                    started = true;
-                }
-                else
-                {
-                    newnode->prev = right;
-                    right->next = newnode;
-                }
-                right = newnode;
-            }
+            cin >> t;
+            if(cmd[0] == 'r')
+                v.push_back(t);
+            else
+                v.insert(v.begin(),t);
         }
         else
         {
-            if(left == right)
-                continue;
-            if(command[0] == 'l')
+            if(!v.empty())
             {
-                right->next = left;
-                left->prev = right;
-                right = left;
-                left=left->next;
+                if(cmd[0] == 'r')
+                {
+                    v.insert(v.begin(),v.back());
+                    v.pop_back();
+                }
+                else
+                {
+                    v.push_back(v[0]);
+                    v.erase(v.begin());
+                }
             }
-            else 
-            {
-                right->next = left;
-                left->prev = right;
-                left=right;
-                right=right->prev;
-            }
-            right->next = NULL;
-            left->prev = NULL;
         }
-        
     }
-    while(left!=NULL) 
-    {
-        cout << left->data << endl;
-        left = left->next;
-    }
+    for(int i=0;v.begin()+i!=v.end();i++)
+        cout << v[i] << endl;
     return 0;
 }
