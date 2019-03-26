@@ -1,13 +1,13 @@
 #include "traffic.h"
 #include <iostream>
 using namespace std;
-bool in;
 pair<pair<int,int>,pair<int,int> > ans1;
 pair<pair<int,int>,pair<int,int> > ans2;
 
 void check(int line, int start, int stop, int n, bool ver)
 {
     int mid,tmp;
+    bool in;
     if(stop-start==1)
     {
         if(ver)
@@ -34,7 +34,7 @@ void check(int line, int start, int stop, int n, bool ver)
             tmp = traffic_query(line,start,line,mid);
         else
             tmp = traffic_query(start,line,mid,line);
-        //cout << start << " " << line << " " << mid << " " << line << " - " << n << " " << tmp << endl;
+        //cout << start << " " << line << " " << stop << " " << line << " - " << tmp << endl;
         in = false;
         if((tmp-(mid-start)) >= 1)
         {
@@ -42,9 +42,9 @@ void check(int line, int start, int stop, int n, bool ver)
             check(line,start,mid,tmp,ver);
         }
         else
-            check(line,mid,stop,n-tmp,ver);
+            check(line,mid,stop,n-tmp-1,ver);
         if(((n-tmp)-(stop-mid)) >= 1 && in)
-            check(line,mid,stop,n-tmp,ver);
+            check(line,mid,stop,n-tmp-1,ver);
     }
 }
 int main()
