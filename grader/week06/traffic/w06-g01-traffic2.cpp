@@ -34,7 +34,7 @@ void check(int line, int start, int stop, int n, bool ver)
             tmp = traffic_query(line,start,line,mid);
         else
             tmp = traffic_query(start,line,mid,line);
-        //cout << start << " " << line << " " << stop << " " << line << " - " << tmp << endl;
+        //cout << start << " " << mid << " " << stop << " " << line << " tmp=" << tmp << " n=" << n << endl;
         in = false;
         if((tmp-(mid-start)) >= 1)
         {
@@ -42,9 +42,9 @@ void check(int line, int start, int stop, int n, bool ver)
             check(line,start,mid,tmp,ver);
         }
         else
-            check(line,mid,stop,n-tmp-1,ver);
+            check(line,mid,stop,n-tmp,ver);
         if(((n-tmp)-(stop-mid)) >= 1 && in)
-            check(line,mid,stop,n-tmp-1,ver);
+            check(line,mid,stop,n-tmp,ver);
     }
 }
 int main()
