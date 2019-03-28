@@ -6,7 +6,8 @@ int main()
     int v[n];
     int h[n];
     int tbl[n];
-    int current;
+    int current[n];
+    int c = 0;
     bool write = false;
     for(int i =0;i<n;i++)
         cin >> v[i];
@@ -17,28 +18,27 @@ int main()
         if(v[i]==h[i])
         {
             write = true;
-            current = i;
+            c = i;
         }
         if(write)
             tbl[i] = 1;
         else
             tbl[i] = 0;
+        current[i] = c;
     }
     for(int i=1;i<n;i++)
     {
-        if(h[i]==v[0] && i<=current)
-        {
-            current = i;
-            tbl[i] = 1;
-        }
+        write = false;
         for(int j=0;j<n;j++)
         {
-            if(v[i]==h[j])
+            if(v[i]==h[j] || write)
             {
-            }
-            else
-            {
-                tbl[i] = tbl[i-1];
+                if(j>current[j])
+                {
+                    current[j] = j;
+                    tbl[j]++;
+                }
+                else if(j==current[j] && j<current)
             }
         }
     }
