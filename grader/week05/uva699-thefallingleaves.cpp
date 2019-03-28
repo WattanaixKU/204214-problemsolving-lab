@@ -1,5 +1,8 @@
 #include <iostream>
+#include <vector>
 using namespace std;
+vector<int> answer;
+int p = 0;
 struct node
 {
     int value;
@@ -16,6 +19,27 @@ void BSTprint(node* croot, int hight)
             cout << "...";
         cout << "* " << croot->value << endl;
         BSTprint(croot->l, hight+1);
+    }
+}
+
+void BSTCount(node* header)
+{
+    if(header->value != -1)
+    {
+        if(p < 0)
+        {
+            p++;
+            answer.insert(answer.begin(),header->value);
+        }
+        else if(p == answer.size())
+            answer.push_back(header->value);
+        else
+            answer[p]+=header->value;
+        p--;
+        BSTCount(header->l);
+        p+=2;
+        BSTCount(header->r);
+        p--;
     }
 }
 
@@ -40,7 +64,7 @@ bool addToBST(node* header, int inp)
 }
 int main()
 {
-    int t;
+    int t, count = 0;
     bool running = false;
     node* header = new node(0);
     while(true)
@@ -51,14 +75,20 @@ int main()
         addToBST(header, t);
         if(!addToBST(header, 0))
         {
-            BSTprint(header,0);
+            //BSTprint(header,0);
+            BSTCount(header);
+            cout << "Case " << ++count << ":" << endl;
+            for(int i=0;i<answer.size()-1;i++)
+                cout << answer[i] << " ";
+            cout << answer.back() << endl << endl;;
             header = new node(0);
+            answer.clear();
+            p = 0;
             running = false;
             continue;
         }
         running = true;
-        cout << "=============" << endl;
     }
-    cout << "done" << endl;
+    //cout << "done" << endl;
     return 0;
 }
