@@ -3,10 +3,9 @@ using namespace std;
 struct node
 {
     int value;
-    node* p;
     node* l;
     node* r;
-    node(int value, node* p, node* l=0,node* r=0) : value(value), p(p), l(l), r(r){}
+    node(int value, node* l=0,node* r=0) : value(value), l(l), r(r){}
 };
 void BSTprint(node* croot, int hight)
 {
@@ -20,40 +19,46 @@ void BSTprint(node* croot, int hight)
     }
 }
 
-void addToBST(node* header)
+bool addToBST(node* header, int inp)
 {
-    int inp;
-    bool started = 0;
-    node* c = header;
-    //node* c = new node(inp,header);
-    //header->l = c;
-    while(header!=c || !started)
+    if(header->value == -1)
+        return false;
+    if(header->value == 0)
     {
-        cin >> inp;
-        started = 1;
-        c->value = inp;
-        if(inp == -1)
+        header->value = inp;
+        if(inp != -1 && inp != 0)
         {
-            c = c->p;
-            while(c->r->value != 0)
-                c = c->p;
-            c = c->r;
+            header->l = new node(0);
+            header->r = new node(0);
         }
-        else
-        {
-            c->l = new node(0,c);
-            c->r = new node(0,c);
-            c = c->l;
-        }
-        BSTprint(header, 0);
+        return true;
     }
-
+    if(!addToBST(header->l, inp))
+        if(!addToBST(header->r, inp))
+            return false;
+    return true;
 }
 int main()
 {
-    int t,cases = 1;
-    node* header = new node(0,0);
-    addToBST(header);
-
+    int t;
+    bool running = false;
+    node* header = new node(0);
+    while(true)
+    {
+        cin >> t;
+        if(t == -1 && !running)
+            break;
+        addToBST(header, t);
+        if(!addToBST(header, 0))
+        {
+            BSTprint(header,0);
+            header = new node(0);
+            running = false;
+            continue;
+        }
+        running = true;
+        cout << "=============" << endl;
+    }
+    cout << "done" << endl;
     return 0;
 }
