@@ -1,38 +1,78 @@
 #include <iostream>
 #include <vector>
-#include <set>
 using namespace std;
+vector<vector<int> > vvi;
 int main()
 {
     int n,m,k,s,f;
+    vector<int>::iterator itf,its;
     cin >> n >> m >> k;
-    vector<set<int> > v(n);
+    vector<int> t;
+    t.push_back(0);
     for(int i=0;i<n;i++)
-        v[i].insert(i);
+    {
+        t[0] = i;
+        vvi.push_back(t);
+    }
     for(int i=0;i<m;i++)
     {
         cin >> s >> f;
         s--;
         f--;
-        if(v[s].find(f) == v[s].end())
+        t.clear();
+        itf = vvi[f].begin();
+        its = vvi[s].begin();
+        while(itf!=vvi[f].end() || its!=vvi[s].end())
         {
-            for(set<int>::iterator it = v[f].begin();it!=v[f].end();it++)
-                v[s].insert(*it);
-            v[f] = v[s];
-            for(set<int>::iterator it = v[s].begin();it!=v[s].end();it++)
-                v[*it] = v[f];
+            if(itf == vvi[f].end())
+            {
+                if(t.back()!=*its)
+                    t.push_back(*its);
+                its++;
+                continue;
+            }
+            if(its == vvi[s].end())
+            {
+                if(t.back()!=*itf)
+                    t.push_back(*itf);
+                itf++;
+                continue;
+            }
+            if(*its <= *itf)
+            {
+                if(t.back()!=*its)
+                    t.push_back(*its);
+                its++;
+            }
+            else
+            {
+                if(t.back()!=*itf)
+                    t.push_back(*itf);
+                itf++;
+            }
         }
-    
+        vvi[s] = t;
+        vvi[f] = t;
     }
+    bool find;
     for(int i=0;i<k;i++)
     {
         cin >> s >> f;
         s--;
         f--;
-        if(v[s].find(f)!=v[s].end())
-            cout << 1 << endl;
-        else
+        find = 0;
+        for(int j=0;j<vvi[s].size() && !find;j++)
+        {
+            cout << vvi[s][j] << " ";
+            if(vvi[s][j] == f)
+            {
+                cout << 1 << endl;
+                find = 1;
+            }
+        }
+        if(!find)
             cout << 0 << endl;
     }
+    
     return 0;
 }
