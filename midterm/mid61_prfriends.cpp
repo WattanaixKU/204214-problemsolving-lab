@@ -5,10 +5,10 @@ int main()
 {
     int l,r,ans = 0;
     cin >> l >> r;
+    l = max(l,2);
     bool a[r+1];
     for(int i=0;i<=r;i++)
         a[i] = 1;
-    a[2] = 1;
     for(int i=2;i<=r;i++)
     {
         if(!a[r+1])
@@ -21,6 +21,7 @@ int main()
     {
         if(a[i])
         {
+//            cout << i << " ";
             if(lastp == -1)
             {
                 lastp = i;
@@ -32,6 +33,5 @@ int main()
         }
     }
     cout << ans << endl;
-
     return 0;
 }
