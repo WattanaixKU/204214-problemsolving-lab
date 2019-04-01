@@ -13,23 +13,26 @@ int main()
         mx = max(mx,q[i]);
     }
     mx++;
-    int ans[mx];
-    for(int i=0;i<mx;i++)
-        ans[i] = 0;
+    int ans[n][n];
     for(int i=0;i<n;i++)
     {
         tmp = 0;
         for(int j=i;j<n;j++)
         {
             tmp += a[j];
-            //cout <<i <<" " << j << " "<< tmp << endl;
-            if(tmp<=mx)
-                ans[tmp] = 1;
+            ans[i][j] = tmp;
         }
     }
-    for(int i=0;i<k;i++)
+    for(int ii=0;ii<k;ii++)
     {
-        if(ans[q[i]])
+        bool find = 0;
+        for(int i=0;i<n;i++)
+        {
+            for(int j=i;j<n;j++)
+                if(ans[i][j] == q[ii])
+                    find = 1;
+        }
+        if(find)
             cout << 'Y';
         else
             cout << 'N';
