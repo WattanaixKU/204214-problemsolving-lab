@@ -12,7 +12,7 @@ int main()
         a[i] = 1;
     for(int i=2;i<=r;i++)
     {
-        if(!a[r+1])
+        if(!a[i])
             continue;
         for(int j=i+i;j<=r;j+=i)
             a[j] = 0;
