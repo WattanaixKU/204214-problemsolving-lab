@@ -2,20 +2,22 @@
 #include <vector>
 #include <algorithm>
 using namespace std;
-typedef vector<int>::iterator vi;
-/*vi bs(int start, int stop, int x)
+vector<int> v;
+int bs(int start, int stop, int x)
 {
     int mid = (start+stop)/2;
     if(v[mid] == x)
-        return 
-    return ans;
+        return mid;
+    if(stop-start<=1)
+        return start;
+    if(v[mid] < x)
+        return bs(mid+1,stop,x);
+    return bs(start,mid,x);
 }
-*/
 int main()
 {
     int n,m,t,dis,c, last_robot = -1, ans = 0;
     cin >> n >> m;
-    vector<int> v;
     for(int i=0;i<n;i++)
     {
         cin >> t;
@@ -24,16 +26,20 @@ int main()
     sort(v.begin(),v.end());
     for(int i=0;i<m;i++)
     {
+        vector<int> v2;
         cin >> t;
+        c = bs(0,n,t)-2;
         dis = 1000001;
-        for(int j=0;j<n;j++)
+        for(int j=c;j<c+4;j++)
         {
-            if(last_robot == j)
+            if(j==last_robot)
+                continue;
+            if(j<0 || j>=n)
                 continue;
             if(abs(v[j]-t)<dis)
             {
-                dis = abs(v[j]-t);
                 c = j;
+                dis = abs(v[j]-t);
             }
         }
         ans += dis;
