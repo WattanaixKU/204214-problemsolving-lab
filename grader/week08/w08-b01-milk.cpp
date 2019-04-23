@@ -52,11 +52,15 @@ int main()
     }
     for(int i=0;i<m;i++)
     {
-        cin >> mode >> m1 >> m2;
+        scanf(" %c%d%d", &mode, &m1, &m2);
+        //cout << mode << m1 << m2;
         m1--;
         m2--;
+        /*for(int j=0;j<n;j++)
+            cout << boss_tbl[j] << " ";
+        cout << endl;*/
         if(mode == 'q')
-            cout << (is_team(m1, m2) ? "yes" : "no") << endl;
+            printf("%s\n",(is_team(m1, m2) ? "yes" : "no"));
         else
             merge_team(m1 ,m2);
     }
