@@ -1,86 +1,92 @@
 #include <iostream>
 #include <vector>
 #include <queue>
+#include <algorithm>
 using namespace std;
 typedef pair<int,int> pii;
 typedef pair<int,pii> ipii;
 int n,m;
-vector<vector<pii> > g;
-void check_graph()
-{
-    for(int i=0;i<n;i++)
-    {
-        int e = g[i].size();
-        cout << i+1 << " | ";
-        for(int j=0;j<e;j++)
-        {
-            cout << "(" << g[i][j].first+1 << "," << g[i][j].second << ") ";
-        }
-        cout << endl;
-    }
-}
+vector<pair<int, pii> > g;
+vector<int> boss_tbl;
+vector<int> team_size;
+
 void get_input()
 {
-    cin >> n >> m;
-    vector<pii> tmp;
-    tmp.push_back(make_pair(0,0));
     int s,f,d;
-    for(int i=0;i<n;i++)
-    {
-        tmp[0].first = i;
-        g.push_back(tmp);
-    }
+    cin >> n >> m;
     for(int i=0;i<m;i++)
     {
-        cin >> s >> f >> d;
+        //cin >> s >> f >> d;
+        scanf(" %d%d%d", &s, &f, &d);
         s--;
         f--;
-        g[s].push_back(make_pair(f,d));
-        g[f].push_back(make_pair(s,d));
+        g.push_back(make_pair(d,make_pair(s,f)));
     }
+    sort(g.begin(), g.end());
 }
-int prim(int starter)
+
+int find_boss(int member)
 {
-    int sum_of_path = 0, unvisited = n;
-    priority_queue<ipii, vector<ipii>, greater<ipii> > pq;
-    int visited[n];
-    int path_to[n];
-    for(int i=0;i<n;i++)
-    {
-        visited[i] = 0;
-        cout << visited[i] << " ";
-        path_to[n] = -1;
-    }
-    cout << endl;
-    for(int i=0;i<n;i++)
-        cout << visited[i] << " ";
-    cout << endl;
-    pq.push(make_pair(0, make_pair(starter ,starter)));
-    while(!pq.empty() && unvisited > 0)
-    {
-        ipii c = pq.top();
-        pq.pop();
-        cout << c.second.first << " " << c.second.second << " " << c.first << endl;
-        cout << c.second.second << " " << visited[c.second.second] << endl;
-        if(visited[c.second.second])
-            continue;
-        visited[c.second.second] = 1;
-        cout << "I'm here" << endl;
-        unvisited--;
-        path_to[c.second.second] = path_to[c.second.first] + c.first;
-        sum_of_path+=path_to[c.second.second];
-        int e = g[c.second.second].size();
-        for(int i=0;i<e;i++)
-            if(!visited[g[c.second.second][i].first])
-                pq.push(make_pair(g[c.second.second][i].second, make_pair(c.second.second, g[c.second.second][i].first)));
-    }
-    cout << "I'm out" << endl;
-    return sum_of_path;
+    while(boss_tbl[member] != member)
+        member = boss_tbl[member];
+    return member;
 }
+
+bool is_team(int x, int y) //is_union
+{
+    int boss_x = find_boss(x);
+    int boss_y = find_boss(y);
+    if(boss_x == boss_y)
+        return true;
+    return false;
+}
+
+void merge_team(int x, int y)
+{
+    int boss_x = find_boss(x);
+    int boss_y = find_boss(y);
+    if(team_size[boss_x] < team_size[boss_y])
+    {
+        boss_tbl[boss_x] = boss_y;
+        team_size[boss_y] += team_size[boss_x];
+        team_size[boss_x] = 0; //Just make more sense (team x was gone T-T)
+    }
+    else
+    {
+        boss_tbl[boss_y] = boss_x;
+        team_size[boss_x] += team_size[boss_y];
+        team_size[boss_y] = 0;
+    }
+}
+
+int kruskal()
+{
+    int ans = 0;
+    int size_of_new_tree = 0;
+    while(size_of_new_tree!=n && !g.empty())
+    {
+        pair<int, pii> c = g.front();
+        g.erase(g.begin());
+        if(!is_team(c.second.first, c.second.second))
+        {
+            ans += c.first;
+            size_of_new_tree++;
+            merge_team(c.second.first, c.second.second);
+        }
+        //cout << c.second.first << " " << c.second.second << endl;
+    }
+    return ans;
+}
+
 int main()
 {
     get_input();
+    for(int i=0;i<n;i++)
+    {
+        boss_tbl.push_back(i);
+        team_size.push_back(1);
+    }
     //check_graph();
-    cout << prim(0) << endl;
+    cout << kruskal() << endl;
     return 0;
 }
