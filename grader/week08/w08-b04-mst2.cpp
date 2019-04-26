@@ -41,7 +41,7 @@ bool is_team(int x, int y) //is_union
     return false;
 }
 
-void merge_team(int x, int y)
+int merge_team(int x, int y)
 {
     int boss_x = find_boss(x);
     int boss_y = find_boss(y);
@@ -49,13 +49,15 @@ void merge_team(int x, int y)
     {
         boss_tbl[boss_x] = boss_y;
         team_size[boss_y] += team_size[boss_x];
-        team_size[boss_x] = 0; //Just make more sense (team x was gone T-T)
+        //team_size[boss_x] = 0; //Just make more sense (team x was gone T-T)
+        return team_size[boss_y];
     }
     else
     {
         boss_tbl[boss_y] = boss_x;
         team_size[boss_x] += team_size[boss_y];
-        team_size[boss_y] = 0;
+        //team_size[boss_y] = 0;
+        return team_size[boss_x];
     }
 }
 
@@ -63,17 +65,31 @@ int kruskal()
 {
     int ans = 0;
     int size_of_new_tree = 0;
-    while(size_of_new_tree!=n && !g.empty())
+    int visited[n];
+    for(int i=0;i<n;i++)
+        visited[i] = 0;
+    int ind = 0;
+    while(ind!=m)
     {
-        pair<int, pii> c = g.front();
-        g.erase(g.begin());
-        if(!is_team(c.second.first, c.second.second))
+        pair<int, pii> c = g[ind];
+        ind++;
+        if(!visited[c.second.first] || !visited[c.second.second])
+        {
+            visited[c.second.first] = 1;
+            visited[c.second.second] = 1;
+            ans += c.first;
+            size_of_new_tree++;
+            if(merge_team(c.second.first, c.second.second) == n)
+                break;
+        }
+        else if(!is_team(c.second.first, c.second.second))
         {
             ans += c.first;
             size_of_new_tree++;
-            merge_team(c.second.first, c.second.second);
+            if(merge_team(c.second.first, c.second.second) == n)
+                break;
         }
-        //cout << c.second.first << " " << c.second.second << endl;
+        //cout << c.second.first << " " << c.second.second << " mst_size:" << size_of_new_tree << endl;
     }
     return ans;
 }
