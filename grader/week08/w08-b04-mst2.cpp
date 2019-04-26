@@ -64,28 +64,14 @@ int merge_team(int x, int y)
 int kruskal()
 {
     int ans = 0;
-    int size_of_new_tree = 0;
-    int visited[n];
-    for(int i=0;i<n;i++)
-        visited[i] = 0;
     int ind = 0;
     while(ind!=m)
     {
         pair<int, pii> c = g[ind];
         ind++;
-        if(!visited[c.second.first] || !visited[c.second.second])
-        {
-            visited[c.second.first] = 1;
-            visited[c.second.second] = 1;
-            ans += c.first;
-            size_of_new_tree++;
-            if(merge_team(c.second.first, c.second.second) == n)
-                break;
-        }
-        else if(!is_team(c.second.first, c.second.second))
+        if(!is_team(c.second.first, c.second.second))
         {
             ans += c.first;
-            size_of_new_tree++;
             if(merge_team(c.second.first, c.second.second) == n)
                 break;
         }
