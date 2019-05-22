@@ -14,13 +14,11 @@ int main()
         vii.push_back(make_pair(inp1,inp2));
     }
     sort(vii.begin(),vii.end());
-    //finish = vii[0].first;
     for(int i=0;i<n;i++)
     {
         finish+=vii[i].second;
         ans = max(finish-vii[i].first,ans);
     }
-    ans = max(0,ans-10);
-    cout << ans*1000 << endl;
+    cout << max(0,ans-10)*1000 << endl;
     return 0;
 }
