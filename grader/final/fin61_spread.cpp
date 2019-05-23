@@ -1,9 +1,40 @@
 #include <iostream>
 #include <vector>
 #include <queue>
+#include <algorithm>
 using namespace std;
+typedef pair<int,int> pii;
+typedef pair<int,pii> ipii;
+int n,m;
+vector<pair<int, pii> > g;
 vector<int> boss_tbl;
 vector<int> team_size;
+vector<int> power_of_n;
+
+void get_input()
+{
+    int s,f,d,tmp,chal;
+    cin >> n >> m;
+    for(int i=0;i<n;i++)
+    {
+        cin >> tmp;
+        power_of_n.push_back(tmp);
+    }
+    for(int i=0;i<m;i++)
+    {
+        //cin >> s >> f >> d;
+        scanf(" %d%d%d", &s, &f, &d);
+        s--;
+        f--;
+        chal = d/(power_of_n[s]+power_of_n[f]);
+        if(d%(power_of_n[s]+power_of_n[f]) != 0)
+            chal++;
+        g.push_back(make_pair(chal,make_pair(s,f)));
+        
+    }
+    sort(g.begin(), g.end());
+}
+
 int find_boss(int member)
 {
     while(boss_tbl[member] != member)
@@ -20,72 +51,55 @@ bool is_team(int x, int y) //is_union
     return false;
 }
 
-void merge_team(int x, int y)
+int merge_team(int x, int y)
 {
-    if(!is_team(x, y))
+    int boss_x = find_boss(x);
+    int boss_y = find_boss(y);
+    if(team_size[boss_x] < team_size[boss_y])
     {
-        int boss_x = find_boss(x);
-        int boss_y = find_boss(y);
-        if(team_size[boss_x] < team_size[boss_y])
-        {
-            boss_tbl[boss_x] = boss_y;
-            team_size[boss_y] += team_size[boss_x];
-            team_size[boss_x] = 0; //Just make more sense (team x was gone T-T)
-        }
-        else
-        {
-            boss_tbl[boss_y] = boss_x;
-            team_size[boss_x] += team_size[boss_y];
-            team_size[boss_y] = 0;
-        }
+        boss_tbl[boss_x] = boss_y;
+        team_size[boss_y] += team_size[boss_x];
+        //team_size[boss_x] = 0; //Just make more sense (team x was gone T-T)
+        return team_size[boss_y];
+    }
+    else
+    {
+        boss_tbl[boss_y] = boss_x;
+        team_size[boss_x] += team_size[boss_y];
+        //team_size[boss_y] = 0;
+        return team_size[boss_x];
     }
 }
-int n, m;
-vector<int> power_of_n;
+
+int kruskal()
+{
+    int ans = -1;
+    int ind = 0;
+    while(ind!=m)
+    {
+        pair<int, pii> c = g[ind];
+        ind++;
+        if(!is_team(c.second.first, c.second.second))
+        {
+            ans = max(ans, c.first);
+            //cout << c.second.first << " " << c.second.second << " " << ans << endl;
+            
+            if(merge_team(c.second.first, c.second.second) == n)
+                break;
+        }
+    }
+    return ans;
+}
+
 int main()
 {
-    int tmp,ans = 0;
-    vector<int> vt(3);
-    cin >> n >> m;
+    get_input();
     for(int i=0;i<n;i++)
     {
         boss_tbl.push_back(i);
         team_size.push_back(1);
     }
-    for(int i=0;i<n;i++)
-    {
-        cin >> tmp;
-        power_of_n.push_back(tmp);
-    }
-    queue<vector<int> > vl;
-    for(int i=0;i<m;i++)
-    {
-        cin >> vt[0] >> vt[1] >> vt[2];
-        vt[0]--;
-        vt[1]--;
-        vl.push(vt);
-    }
-    while(!vl.empty())
-    {
-        if(team_size[0]==n)
-            break;
-        ans++;
-        int this_round = vl.size();
-        for(int i=0;i<this_round;i++)
-        {
-            vt = vl.front();
-            //printf("%d | %d %d %d\n",ans, vt[0]+1, vt[1]+1, vt[2]);
-            vl.pop();
-            if(is_team(vt[0],vt[1]))
-                continue;
-            vt[2] -= power_of_n[vt[0]]+power_of_n[vt[1]];
-            if(vt[2] <= 0)
-                merge_team(vt[0], vt[1]);
-            else
-                vl.push(vt);
-        }
-        //cout << endl;
-    }
-    cout << ans << endl;
+    //check_graph();
+    cout << kruskal() << endl;
     return 0;
 }
