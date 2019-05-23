@@ -12,11 +12,11 @@ int wayout(int x,int y)
         return n + y+1;
     if(y == n)
         return 2*n + (n-x);
-    if(x == -1)
-        return 3*n + (n-y);
+    return 3*n + (n-y);
 }
 int gogoletsgo(int x, int y, int d)
 {
+    //cout << x << " " << y << " " << d << endl;
     if(x < 0 || x == n || y < 0 || y == n)
         return wayout(x,y);
     if(dp[x][y][d] != -1)
@@ -82,5 +82,13 @@ int main()
         tbl.push_back(charv);
         dp.push_back(outer);
     }
+    for(int i=0;i<n;i++)
+        cout << gogoletsgo(i,0,2) << endl;
+    for(int i=0;i<n;i++)
+        cout << gogoletsgo(n-1,i,0) << endl;
+    for(int i=0;i<n;i++)
+        cout << gogoletsgo(n-i-1,n-1,3) << endl;
+    for(int i=0;i<n;i++)
+        cout << gogoletsgo(0,n-i-1,1) << endl;
     return 0;
 }
